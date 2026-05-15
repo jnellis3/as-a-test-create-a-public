@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Blockfall Tetris</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="game-panel" aria-label="Tetris game">
+        <div class="top-bar">
+          <div>
+            <p class="eyebrow">GitHub Pages demo</p>
+            <h1>Blockfall</h1>
+          </div>
+          <button id="pauseButton" class="icon-button" type="button" aria-label="Pause game" title="Pause">
+            <span id="pauseIcon">II</span>
+          </button>
+        </div>
+
+        <div class="play-area">
+          <canvas id="board" width="300" height="600" aria-label="Tetris board"></canvas>
+          <aside class="stats" aria-label="Game stats">
+            <div class="stat">
+              <span>Score</span>
+              <strong id="score">0</strong>
+            </div>
+            <div class="stat">
+              <span>Lines</span>
+              <strong id="lines">0</strong>
+            </div>
+            <div class="stat">
+              <span>Level</span>
+              <strong id="level">1</strong>
+            </div>
+            <div class="next-box">
+              <span>Next</span>
+              <canvas id="next" width="120" height="120" aria-label="Next piece preview"></canvas>
+            </div>
+            <button id="restartButton" type="button">New Game</button>
+          </aside>
+        </div>
+
+        <div class="touch-controls" aria-label="Touch controls">
+          <button data-action="left" type="button" aria-label="Move left">←</button>
+          <button data-action="rotate" type="button" aria-label="Rotate">↻</button>
+          <button data-action="right" type="button" aria-label="Move right">→</button>
+          <button data-action="drop" type="button" aria-label="Soft drop">↓</button>
+          <button data-action="hardDrop" type="button" aria-label="Hard drop">⤓</button>
+        </div>
+      </section>
+    </main>
+
+    <script src="game.js"></script>
+  </body>
+</html>
