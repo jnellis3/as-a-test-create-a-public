@@ -10,4 +10,4 @@ A tiny static Tetris-style game built with HTML, CSS, and JavaScript for GitHub 
 - Space: hard drop
 - P: pause
 
-The touch controls appear on smaller screens.
+On phones and tablets, the on-screen controls fit below the board. Hold left, right, or down to repeat the move.
