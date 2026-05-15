@@ -44,6 +44,7 @@ let lastTime;
 let paused;
 let gameOver;
 let animationFrame;
+let repeatTimer;
 
 function emptyBoard() {
   return Array.from({ length: ROWS }, () => Array(COLS).fill(null));
@@ -227,7 +228,7 @@ function updateStats() {
   scoreEl.textContent = score.toLocaleString();
   linesEl.textContent = lines.toString();
   levelEl.textContent = level.toString();
-  pauseIcon.textContent = paused && !gameOver ? "▶" : "II";
+  pauseIcon.textContent = paused && !gameOver ? ">" : "II";
 }
 
 function loop(time = 0) {
@@ -280,15 +281,36 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
+function runTouchAction(action) {
+  if (action === "left") move(-1);
+  if (action === "right") move(1);
+  if (action === "rotate") rotatePiece();
+  if (action === "drop") softDrop();
+  if (action === "hardDrop") hardDrop();
+}
+
+function stopRepeating() {
+  clearInterval(repeatTimer);
+  repeatTimer = undefined;
+}
+
 document.querySelectorAll("[data-action]").forEach((button) => {
-  button.addEventListener("click", () => {
+  button.addEventListener("pointerdown", (event) => {
+    event.preventDefault();
+    button.setPointerCapture(event.pointerId);
     const action = button.dataset.action;
-    if (action === "left") move(-1);
-    if (action === "right") move(1);
-    if (action === "rotate") rotatePiece();
-    if (action === "drop") softDrop();
-    if (action === "hardDrop") hardDrop();
+    runTouchAction(action);
+
+    if (button.dataset.repeat === "true") {
+      stopRepeating();
+      repeatTimer = setInterval(() => runTouchAction(action), action === "drop" ? 80 : 120);
+    }
   });
+
+  button.addEventListener("pointerup", stopRepeating);
+  button.addEventListener("pointercancel", stopRepeating);
+  button.addEventListener("lostpointercapture", stopRepeating);
+  button.addEventListener("contextmenu", (event) => event.preventDefault());
 });
 
 pauseButton.addEventListener("click", () => {
