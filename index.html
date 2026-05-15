@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>Blockfall Tetris</title>
     <link rel="stylesheet" href="styles.css">
   </head>
@@ -43,10 +43,10 @@
         </div>
 
         <div class="touch-controls" aria-label="Touch controls">
-          <button data-action="left" type="button" aria-label="Move left">←</button>
+          <button data-action="left" data-repeat="true" type="button" aria-label="Move left">←</button>
           <button data-action="rotate" type="button" aria-label="Rotate">↻</button>
-          <button data-action="right" type="button" aria-label="Move right">→</button>
-          <button data-action="drop" type="button" aria-label="Soft drop">↓</button>
+          <button data-action="right" data-repeat="true" type="button" aria-label="Move right">→</button>
+          <button data-action="drop" data-repeat="true" type="button" aria-label="Soft drop">↓</button>
           <button data-action="hardDrop" type="button" aria-label="Hard drop">⤓</button>
         </div>
       </section>
