@@ -110,6 +110,9 @@ h1 {
   height: min(72vh, 600px);
   max-height: 600px;
   max-width: 100%;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
   width: auto;
 }
 
@@ -219,8 +222,8 @@ h1 {
   }
 
   #board {
-    height: min(calc(100svh - 238px), calc((100vw - 28px) * 2), 600px);
-    min-height: 300px;
+    height: min(calc(100svh - 280px), calc((100vw - 28px) * 2), 600px);
+    min-height: 260px;
     width: auto;
   }
 
@@ -250,12 +253,24 @@ h1 {
   }
 
   .next-box {
-    display: none;
+    align-items: center;
+    display: flex;
+    gap: 8px;
+    grid-column: 1 / -1;
+    justify-content: space-between;
+    min-height: 56px;
+  }
+
+  #next {
+    height: 48px;
+    width: 48px;
   }
 
   #restartButton {
     align-self: stretch;
     font-size: 0.82rem;
+    grid-column: 4;
+    grid-row: 1;
     min-height: 0;
     padding: 0 8px;
   }
@@ -280,8 +295,8 @@ h1 {
 
 @media (max-width: 380px) {
   #board {
-    height: min(calc(100svh - 224px), calc((100vw - 28px) * 2), 600px);
-    min-height: 260px;
+    height: min(calc(100svh - 260px), calc((100vw - 28px) * 2), 600px);
+    min-height: 240px;
   }
 
   .stats {
@@ -317,7 +332,16 @@ h1 {
     align-content: start;
     grid-template-columns: 1fr;
     order: 0;
-    width: 92px;
+    width: 104px;
+  }
+
+  .next-box {
+    grid-column: auto;
+  }
+
+  #next {
+    height: 64px;
+    width: 64px;
   }
 
   .touch-controls {
@@ -331,5 +355,11 @@ h1 {
 
   .touch-controls button {
     min-height: 46px;
+  }
+
+  #restartButton {
+    grid-column: auto;
+    grid-row: auto;
+    min-height: 38px;
   }
 }
