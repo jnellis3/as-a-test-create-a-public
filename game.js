@@ -416,18 +416,25 @@ boardCanvas.addEventListener("pointerdown", (event) => {
   const y = event.clientY - rect.top;
   boardPointer = {
     id: event.pointerId,
+    activePiece: current,
     startX: x,
     startY: y,
     lastMoveX: x,
     lastDropY: y,
     startedAt: performance.now(),
-    moved: false
+    moved: false,
+    dropLocked: false
   };
 });
 
 boardCanvas.addEventListener("pointermove", (event) => {
   if (!boardPointer || boardPointer.id !== event.pointerId) return;
   event.preventDefault();
+  if (!boardPointer.activePiece || boardPointer.activePiece !== current) {
+    boardPointer.dropLocked = true;
+    return;
+  }
+
   const rect = boardCanvas.getBoundingClientRect();
   const x = event.clientX - rect.left;
   const y = event.clientY - rect.top;
@@ -446,10 +453,18 @@ boardCanvas.addEventListener("pointermove", (event) => {
     boardPointer.moved = true;
   }
 
-  if (dy >= dropStep) {
+  if (dy >= dropStep && !boardPointer.dropLocked) {
     const steps = Math.trunc(dy / dropStep);
     for (let step = 0; step < steps; step += 1) {
+      if (boardPointer.activePiece !== current) {
+        boardPointer.dropLocked = true;
+        break;
+      }
       softDrop();
+      if (boardPointer.activePiece !== current) {
+        boardPointer.dropLocked = true;
+        break;
+      }
     }
     boardPointer.lastDropY += steps * dropStep;
     boardPointer.moved = true;
@@ -465,10 +480,16 @@ boardCanvas.addEventListener("pointerup", (event) => {
   const dx = x - boardPointer.startX;
   const dy = y - boardPointer.startY;
   const elapsed = performance.now() - boardPointer.startedAt;
+  const samePiece = boardPointer.activePiece && boardPointer.activePiece === current;
+
+  if (!samePiece) {
+    boardPointer = null;
+    return;
+  }
 
   if (Math.abs(dx) < 16 && Math.abs(dy) < 16 && elapsed < 350) {
     rotatePiece();
-  } else if (dy > 90 && dy > Math.abs(dx) * 1.2 && elapsed < 360) {
+  } else if (!boardPointer.dropLocked && dy > 90 && dy > Math.abs(dx) * 1.2 && elapsed < 360) {
     hardDrop();
   }
 
