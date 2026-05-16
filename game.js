@@ -49,6 +49,7 @@ let repeatTimer;
 let clearingRows;
 let clearStartTime;
 let boardPointer;
+let lastTouchEnd = 0;
 
 function emptyBoard() {
   return Array.from({ length: ROWS }, () => Array(COLS).fill(null));
@@ -407,6 +408,18 @@ document.querySelectorAll("[data-action]").forEach((button) => {
   button.addEventListener("lostpointercapture", stopRepeating);
   button.addEventListener("contextmenu", (event) => event.preventDefault());
 });
+
+document.addEventListener(
+  "touchend",
+  (event) => {
+    const now = performance.now();
+    if (now - lastTouchEnd < 320) {
+      event.preventDefault();
+    }
+    lastTouchEnd = now;
+  },
+  { passive: false }
+);
 
 boardCanvas.addEventListener("pointerdown", (event) => {
   event.preventDefault();
