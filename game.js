@@ -158,6 +158,19 @@ function rotatePiece() {
   }
 }
 
+function landingPiece() {
+  const ghost = {
+    ...current,
+    matrix: current.matrix
+  };
+
+  while (!collides(ghost, 0, 1)) {
+    ghost.y += 1;
+  }
+
+  return ghost;
+}
+
 function drawCell(ctx, x, y, color, size = CELL) {
   ctx.fillStyle = color;
   ctx.fillRect(x * size, y * size, size, size);
@@ -165,6 +178,31 @@ function drawCell(ctx, x, y, color, size = CELL) {
   ctx.fillRect(x * size + 2, y * size + 2, size - 4, 4);
   ctx.strokeStyle = "rgba(0, 0, 0, 0.24)";
   ctx.strokeRect(x * size + 0.5, y * size + 0.5, size - 1, size - 1);
+}
+
+function drawGhostCell(ctx, x, y, color, size = CELL) {
+  ctx.save();
+  ctx.globalAlpha = 0.16;
+  ctx.fillStyle = color;
+  ctx.fillRect(x * size + 4, y * size + 4, size - 8, size - 8);
+  ctx.globalAlpha = 0.58;
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = color;
+  ctx.strokeRect(x * size + 3, y * size + 3, size - 6, size - 6);
+  ctx.restore();
+}
+
+function drawGhostPiece() {
+  const ghost = landingPiece();
+  if (ghost.y === current.y) return;
+
+  ghost.matrix.forEach((row, y) => {
+    row.forEach((cell, x) => {
+      if (cell && ghost.y + y >= 0) {
+        drawGhostCell(boardCtx, ghost.x + x, ghost.y + y, COLORS[ghost.type]);
+      }
+    });
+  });
 }
 
 function drawBoard() {
@@ -193,6 +231,7 @@ function drawBoard() {
   });
 
   if (current) {
+    drawGhostPiece();
     current.matrix.forEach((row, y) => {
       row.forEach((cell, x) => {
         if (cell) drawCell(boardCtx, current.x + x, current.y + y, COLORS[current.type]);
